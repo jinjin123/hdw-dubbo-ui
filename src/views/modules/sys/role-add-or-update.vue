@@ -38,6 +38,7 @@
 </template>
 
 <script>
+  import {treeDataTranslate} from '@/utils'
   export default {
     data () {
       return {
@@ -45,7 +46,7 @@
         menuList: [],
         resourceIdTree: [],
         menuListTreeProps: {
-          label: 'label',
+          label: 'name',
           children: 'children'
         },
         dataForm: {
@@ -69,11 +70,11 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/menu/selectTreeNode'),
+          url: this.$http.adornUrl('/sys/menu/list'),
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          this.menuList = data.menuList
+          this.menuList = treeDataTranslate(data, 'id', 'parentId')
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {

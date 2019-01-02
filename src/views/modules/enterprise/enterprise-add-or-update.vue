@@ -345,9 +345,9 @@
         var fileName = file.name
         var url = ''
         if (file.id) {
-          url = '/enterprise/deleteFileById/' + id
+          url = '/enterprise/deleteFileById?id=' + id
         } else {
-          url = '/enterprise/deleteFileByName/' + fileName
+          url = '/enterprise/deleteFileByName?fileName=' + fileName
         }
         if (url) {
           this.$http({

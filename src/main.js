@@ -11,6 +11,7 @@ import httpRequest from '@/utils/httpRequest' // api: https://github.com/axios/a
 import { isAuth } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
 import 'jquery'
+import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
 import 'videojs-contrib-hls'
@@ -19,6 +20,7 @@ import Viewer from 'v-viewer'
 import Print from 'vue-print-nb'
 
 Vue.use(VueCookie)
+Vue.use(VueVideoPlayer)
 Vue.use(Viewer)
 Vue.use(Print)
 

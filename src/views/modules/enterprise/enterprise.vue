@@ -21,13 +21,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-        <el-form-item>
-          <el-input v-model="dataForm.enterpriseName" placeholder="企业名称" clearable></el-input>
-        </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.enterpriseName" placeholder="企业名称" clearable></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise/enterprise/save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('enterprise/enterprise/delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('enterprise/enterprise/save')" type="primary" @click="addOrUpdateHandle()">新增
+        </el-button>
+        <el-button v-if="isAuth('enterprise/enterprise/delete')" type="danger" @click="deleteHandle()"
+                   :disabled="dataListSelections.length <= 0">批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -197,8 +200,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-            <el-button v-if="isAuth('enterprise/enterprise/update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i></el-button>
-            <el-button v-if="isAuth('enterprise/enterprise/delete')" type="text" size="small" @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+          <el-button v-if="isAuth('enterprise/enterprise/update')" type="text" size="small"
+                     @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i></el-button>
+          <el-button v-if="isAuth('enterprise/enterprise/delete')" type="text" size="small"
+                     @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -217,131 +222,132 @@
 </template>
 
 <script>
-  import AddOrUpdate from './enterprise-add-or-update'
-  export default {
-    data () {
-      return {
-        dataForm: {
-          industryCode: '',
-          areaCode: '',
-          enterpriseName: ''
-        },
-        dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
-        dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false,
-        industryList: [],
-        areaList: []
-      }
-    },
-    components: {
-      AddOrUpdate
-    },
-    activated () {
-      this.getDataList()
-      this.initIndustryList()
-      this.initAreaList()
-    },
-    methods: {
-      // 获取数据列表
-      getDataList () {
-        this.dataListLoading = true
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'industryCode': this.dataForm.industryCode,
-            'areaCode': this.dataForm.areaCode,
-            'enterpriseName': this.dataForm.enterpriseName
-          })
-        }).then(({data}) => {
-          if (data && data.code === 0) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
-          }
-          this.dataListLoading = false
-        })
+    import AddOrUpdate from './enterprise-add-or-update'
+
+    export default {
+      data () {
+        return {
+          dataForm: {
+            industryCode: '',
+            areaCode: '',
+            enterpriseName: ''
+          },
+          dataList: [],
+          pageIndex: 1,
+          pageSize: 10,
+          totalPage: 0,
+          dataListLoading: false,
+          dataListSelections: [],
+          addOrUpdateVisible: false,
+          industryList: [],
+          areaList: []
+        }
       },
-      // 每页数
-      sizeChangeHandle (val) {
-        this.pageSize = val
-        this.pageIndex = 1
+      components: {
+        AddOrUpdate
+      },
+      activated () {
         this.getDataList()
+        this.initIndustryList()
+        this.initAreaList()
       },
-      // 当前页
-      currentChangeHandle (val) {
-        this.pageIndex = val
-        this.getDataList()
-      },
-      // 多选
-      selectionChangeHandle (val) {
-        this.dataListSelections = val
-      },
-      // 新增 / 修改
-      addOrUpdateHandle (id) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id)
-        })
-      },
-      // 删除
-      deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.id
-        })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      methods: {
+            // 获取数据列表
+        getDataList () {
+          this.dataListLoading = true
           this.$http({
-            url: this.$http.adornUrl('/enterprise/delete'),
-            method: 'post',
-            data: this.$http.adornData(ids, false)
+            url: this.$http.adornUrl('/enterprise/list'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'page': this.pageIndex,
+              'limit': this.pageSize,
+              'industryCode': this.dataForm.industryCode,
+              'areaCode': this.dataForm.areaCode,
+              'enterpriseName': this.dataForm.enterpriseName
+            })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
+              this.dataList = data.page.list
+              this.totalPage = data.page.totalCount
             } else {
-              this.$message.error(data.msg)
+              this.dataList = []
+              this.totalPage = 0
             }
+            this.dataListLoading = false
           })
-        })
-      },
-      initIndustryList () {
-        this.industryList = []
-        this.$http({
-          url: this.$http.adornUrl('/sys/dic/select/9'),
-          method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.industryList = data.dicList
-        })
-      },
-      initAreaList () {
-        this.areaList = []
-        this.$http({
-          url: this.$http.adornUrl('/sys/dic/select/16'),
-          method: 'get',
-          params: this.$http.adornParams()
-        }).then(({data}) => {
-          this.areaList = data.dicList
-        })
+        },
+            // 每页数
+        sizeChangeHandle (val) {
+          this.pageSize = val
+          this.pageIndex = 1
+          this.getDataList()
+        },
+            // 当前页
+        currentChangeHandle (val) {
+          this.pageIndex = val
+          this.getDataList()
+        },
+            // 多选
+        selectionChangeHandle (val) {
+          this.dataListSelections = val
+        },
+            // 新增 / 修改
+        addOrUpdateHandle (id) {
+          this.addOrUpdateVisible = true
+          this.$nextTick(() => {
+            this.$refs.addOrUpdate.init(id)
+          })
+        },
+            // 删除
+        deleteHandle (id) {
+          var ids = id ? [id] : this.dataListSelections.map(item => {
+            return item.id
+          })
+          this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http({
+              url: this.$http.adornUrl('/enterprise/delete'),
+              method: 'post',
+              data: this.$http.adornData(ids, false)
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.getDataList()
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          })
+        },
+        initIndustryList () {
+          this.industryList = []
+          this.$http({
+            url: this.$http.adornUrl('/sys/dic/select/9'),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            this.industryList = data.dicList
+          })
+        },
+        initAreaList () {
+          this.areaList = []
+          this.$http({
+            url: this.$http.adornUrl('/sys/dic/select/16'),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            this.areaList = data.dicList
+          })
+        }
       }
     }
-  }
 </script>

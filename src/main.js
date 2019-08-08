@@ -11,16 +11,14 @@ import httpRequest from '@/utils/httpRequest' // api: https://github.com/axios/a
 import { isAuth } from '@/utils'
 import cloneDeep from 'lodash/cloneDeep'
 import 'jquery'
-import VueVideoPlayer from 'vue-video-player'
+import Video from 'video.js'
 import 'video.js/dist/video-js.css'
-import 'vue-video-player/src/custom-theme.css'
 import 'videojs-contrib-hls'
 import 'videojs-flash'
 import Viewer from 'v-viewer'
 import Print from 'vue-print-nb'
 
 Vue.use(VueCookie)
-Vue.use(VueVideoPlayer)
 Vue.use(Viewer)
 Vue.use(Print)
 
@@ -53,6 +51,7 @@ if (process.env.NODE_ENV !== 'production') {
 // 挂载全局
 Vue.prototype.$http = httpRequest // ajax请求方法
 Vue.prototype.isAuth = isAuth     // 权限方法
+Vue.prototype.$video = Video // video.js
 
 // 保存整站vuex本地储存初始状态
 window.SITE_CONFIG['storeState'] = cloneDeep(store.state)

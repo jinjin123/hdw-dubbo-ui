@@ -2,13 +2,29 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.jobName" placeholder="职务名称" clearable></el-input>
+        <el-input v-model="dataForm.userName" placeholder="用户名" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/save')" type="primary" @click="addOrUpdateHandle()">新增
-        </el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="danger" @click="deleteHandle()"
+        <el-date-picker clearable
+                        v-model="dataForm.startTime"
+                        type="datetime"
+                        placeholder="选择日期"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-date-picker clearable
+                        v-model="dataForm.endTime"
+                        type="datetime"
+                        placeholder="选择日期"
+                        format="yyyy-MM-dd HH:mm:ss"
+                        value-format="yyyy-MM-dd HH:mm:ss">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList(1)">查询</el-button>
+        <el-button v-if="isAuth('sms/smsRecord/delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
@@ -26,40 +42,48 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="enterpriseName"
+        prop="userName"
         header-align="center"
         align="center"
-        label="公司名称">
+        label="账号">
       </el-table-column>
       <el-table-column
-        prop="departmentName"
+        prop="title"
         header-align="center"
         align="center"
-        label="部门名称">
+        label="消息标题">
       </el-table-column>
       <el-table-column
-        prop="jobName"
+        prop="content"
         header-align="center"
         align="center"
-        label="职务名称">
+        show-overflow-tooltip
+        label="消息内容">
       </el-table-column>
       <el-table-column
-        prop="jobCode"
+        prop="smsTime"
         header-align="center"
         align="center"
-        label="职务代码">
+        label="要求推送时间">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="pushTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="实际推送时间">
       </el-table-column>
       <el-table-column
-        prop="updateTime"
+        prop="status"
         header-align="center"
         align="center"
-        label="更新时间">
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small">待推送</el-tag>
+          <el-tag v-else-if="scope.row.status === 1" size="small">推送成功</el-tag>
+          <el-tag v-else-if="scope.row.status === 2" size="small" type="danger">推送失败</el-tag>
+          <el-tag v-else-if="scope.row.status === 3" size="small">已读</el-tag>
+          <el-tag v-else size="small" type="danger">禁用</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -68,10 +92,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('enterprise/enterpriseJob/update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i></el-button>
-          <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="text" size="small"
-                     @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+          <el-button v-if="isAuth('sms/smsRecord/delete')" type="text" size="small" @click="deleteHandle(scope.row.id)">
+            <i class="el-icon-delete"></i></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,19 +106,17 @@
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
   </div>
 </template>
 
 <script>
-    import AddOrUpdate from './enterpriseJob-add-or-update'
-
     export default {
       data () {
         return {
           dataForm: {
-            jobName: ''
+            userName: '',
+            startTime: '',
+            endTime: ''
           },
           dataList: [],
           pageIndex: 1,
@@ -107,23 +127,26 @@
           addOrUpdateVisible: false
         }
       },
-      components: {
-        AddOrUpdate
-      },
+      components: {},
       activated () {
         this.getDataList()
       },
       methods: {
             // 获取数据列表
-        getDataList () {
+        getDataList (pageIndex) {
+          if (pageIndex) {
+            this.pageIndex = pageIndex
+          }
           this.dataListLoading = true
           this.$http({
-            url: this.$http.adornUrl('/enterprise/enterpriseJob/list'),
+            url: this.$http.adornUrl('/sms/smsRecord/list'),
             method: 'get',
             params: this.$http.adornParams({
               'page': this.pageIndex,
               'limit': this.pageSize,
-              'jobName': this.dataForm.jobName
+              'userName': this.dataForm.userName,
+              'startTime': this.dataForm.startTime,
+              'endTime': this.dataForm.endTime
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
@@ -169,7 +192,7 @@
             type: 'warning'
           }).then(() => {
             this.$http({
-              url: this.$http.adornUrl('/enterprise/enterpriseJob/delete'),
+              url: this.$http.adornUrl('/sms/smsRecord/delete'),
               method: 'post',
               data: this.$http.adornData(ids, false)
             }).then(({data}) => {

@@ -2,13 +2,12 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.jobName" placeholder="职务名称" clearable></el-input>
+        <el-input v-model="dataForm.title" placeholder="消息标题" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/save')" type="primary" @click="addOrUpdateHandle()">新增
-        </el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="danger" @click="deleteHandle()"
+        <el-button @click="getDataList(1)">查询</el-button>
+        <el-button v-if="isAuth('sms/sms/save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('sms/sms/delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
@@ -26,40 +25,62 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="enterpriseName"
+        prop="typeName"
         header-align="center"
         align="center"
-        label="公司名称">
+        label="消息类型">
       </el-table-column>
       <el-table-column
-        prop="departmentName"
+        prop="title"
         header-align="center"
         align="center"
-        label="部门名称">
+        label="消息标题">
       </el-table-column>
       <el-table-column
-        prop="jobName"
+        prop="content"
         header-align="center"
         align="center"
-        label="职务名称">
+        label="消息内容">
       </el-table-column>
       <el-table-column
-        prop="jobCode"
+        prop="smsTime"
         header-align="center"
         align="center"
-        label="职务代码">
+        label="推送时间">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="smsCount"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="推送次数">
       </el-table-column>
       <el-table-column
-        prop="updateTime"
+        prop="intervalTime"
         header-align="center"
         align="center"
-        label="更新时间">
+        label="推送间隔时间（秒）">
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        header-align="center"
+        align="center"
+        label="状态">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.status === 0" size="small">正常</el-tag>
+          <el-tag v-if="scope.row.status === 1" size="small" type="danger">禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="realTime"
+        header-align="center"
+        align="center"
+        label="上次推送时间">
+      </el-table-column>
+      <el-table-column
+        prop="realCount"
+        header-align="center"
+        align="center"
+        label="推送真实次数">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -68,10 +89,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('enterprise/enterpriseJob/update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i></el-button>
-          <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="text" size="small"
-                     @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+          <el-button v-if="isAuth('sms/sms/update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">
+            <i class="el-icon-edit"></i></el-button>
+          <el-button v-if="isAuth('sms/sms/delete')" type="text" size="small" @click="deleteHandle(scope.row.id)"><i
+            class="el-icon-delete"></i></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -90,13 +111,13 @@
 </template>
 
 <script>
-    import AddOrUpdate from './enterpriseJob-add-or-update'
+    import AddOrUpdate from './sms-add-or-update'
 
     export default {
       data () {
         return {
           dataForm: {
-            jobName: ''
+            title: ''
           },
           dataList: [],
           pageIndex: 1,
@@ -115,15 +136,18 @@
       },
       methods: {
             // 获取数据列表
-        getDataList () {
+        getDataList (pageIndex) {
+          if (pageIndex) {
+            this.pageIndex = pageIndex
+          }
           this.dataListLoading = true
           this.$http({
-            url: this.$http.adornUrl('/enterprise/enterpriseJob/list'),
+            url: this.$http.adornUrl('/sms/sms/list'),
             method: 'get',
             params: this.$http.adornParams({
               'page': this.pageIndex,
               'limit': this.pageSize,
-              'jobName': this.dataForm.jobName
+              'title': this.dataForm.title
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
@@ -169,7 +193,7 @@
             type: 'warning'
           }).then(() => {
             this.$http({
-              url: this.$http.adornUrl('/enterprise/enterpriseJob/delete'),
+              url: this.$http.adornUrl('/sms/sms/delete'),
               method: 'post',
               data: this.$http.adornData(ids, false)
             }).then(({data}) => {

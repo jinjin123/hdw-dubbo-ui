@@ -2,13 +2,12 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.jobName" placeholder="职务名称" clearable></el-input>
+        <el-input v-model="dataForm.typeName" placeholder="类型名称" clearable></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/save')" type="primary" @click="addOrUpdateHandle()">新增
-        </el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="danger" @click="deleteHandle()"
+        <el-button @click="getDataList(1)">查询</el-button>
+        <el-button v-if="isAuth('sms/smsType/save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('sms/smsType/delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
       </el-form-item>
@@ -26,40 +25,36 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="enterpriseName"
+        prop="typeName"
         header-align="center"
         align="center"
-        label="公司名称">
+        label="类型名称">
       </el-table-column>
       <el-table-column
-        prop="departmentName"
+        prop="targetList"
         header-align="center"
         align="center"
-        label="部门名称">
+        label="账号列表">
       </el-table-column>
       <el-table-column
-        prop="jobName"
+        prop="isSendSms"
         header-align="center"
         align="center"
-        label="职务名称">
+        label="发送短信">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isSendSms === 0" size="small">是</el-tag>
+          <el-tag v-if="scope.row.isSendSms === 1" size="small" type="danger">否</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="jobCode"
+        prop="isSendEmail"
         header-align="center"
         align="center"
-        label="职务代码">
-      </el-table-column>
-      <el-table-column
-        prop="createTime"
-        header-align="center"
-        align="center"
-        label="创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="updateTime"
-        header-align="center"
-        align="center"
-        label="更新时间">
+        label="发送邮件">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isSendEmail === 0" size="small">是</el-tag>
+          <el-tag v-if="scope.row.isSendEmail === 1" size="small" type="danger">否</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -68,10 +63,10 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('enterprise/enterpriseJob/update')" type="text" size="small"
+          <el-button v-if="isAuth('sms/smsType/update')" type="text" size="small"
                      @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i></el-button>
-          <el-button v-if="isAuth('enterprise/enterpriseJob/delete')" type="text" size="small"
-                     @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
+          <el-button v-if="isAuth('sms/smsType/delete')" type="text" size="small" @click="deleteHandle(scope.row.id)"><i
+            class="el-icon-delete"></i></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -90,13 +85,13 @@
 </template>
 
 <script>
-    import AddOrUpdate from './enterpriseJob-add-or-update'
+    import AddOrUpdate from './smsType-add-or-update'
 
     export default {
       data () {
         return {
           dataForm: {
-            jobName: ''
+            typeName: ''
           },
           dataList: [],
           pageIndex: 1,
@@ -115,15 +110,18 @@
       },
       methods: {
             // 获取数据列表
-        getDataList () {
+        getDataList (pageIndex) {
+          if (pageIndex) {
+            this.pageIndex = pageIndex
+          }
           this.dataListLoading = true
           this.$http({
-            url: this.$http.adornUrl('/enterprise/enterpriseJob/list'),
+            url: this.$http.adornUrl('/sms/smsType/list'),
             method: 'get',
             params: this.$http.adornParams({
               'page': this.pageIndex,
               'limit': this.pageSize,
-              'jobName': this.dataForm.jobName
+              'typeName': this.dataForm.typeName
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
@@ -169,7 +167,7 @@
             type: 'warning'
           }).then(() => {
             this.$http({
-              url: this.$http.adornUrl('/enterprise/enterpriseJob/delete'),
+              url: this.$http.adornUrl('/sms/smsType/delete'),
               method: 'post',
               data: this.$http.adornData(ids, false)
             }).then(({data}) => {

@@ -6,7 +6,9 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('enterprise/enterpriseDepartment/save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('enterprise/enterpriseDepartment/save')" type="primary" @click="addOrUpdateHandle()">
+          新增
+        </el-button>
       </el-form-item>
     </el-form>
 
@@ -51,7 +53,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('enterprise/enterpriseDepartment/update')" type="text" size="small"
-                     @click="addOrUpdateHandle(scope.row.id,scope.row.enterpriseId)"><i class="el-icon-edit"></i>
+                     @click="addOrUpdateHandle(scope.row.id)"><i class="el-icon-edit"></i>
           </el-button>
           <el-button v-if="isAuth('enterprise/enterpriseDepartment/delete')" type="text" size="small"
                      @click="deleteHandle(scope.row.id)"><i class="el-icon-delete"></i></el-button>
@@ -64,85 +66,86 @@
 </template>
 
 <script>
-  import {treeDataTranslate} from '@/utils'
-  import TableTreeColumn from '@/components/table-tree-column'
-  import AddOrUpdate from './enterpriseDepartment-add-or-update'
-  export default {
-    data () {
-      return {
-        dataForm: {
-          enterpriseId: '',
-          departmentName: ''
-        },
-        dataList: [],
-        pageIndex: 1,
-        pageSize: 10,
-        totalPage: 0,
-        dataListLoading: false,
-        dataListSelections: [],
-        addOrUpdateVisible: false
-      }
-    },
-    components: {
-      TableTreeColumn,
-      AddOrUpdate
-    },
-    activated () {
-      this.getDataList()
-    },
-    methods: {
-      // 获取数据列表
-      getDataList () {
-        this.dataListLoading = true
-        this.$http({
-          url: this.$http.adornUrl('/enterprise/enterpriseDepartment/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'departmentName': this.dataForm.departmentName,
-            'enterpriseId': this.dataForm.enterpriseId
-          })
-        }).then(({data}) => {
-          this.dataList = treeDataTranslate(data.list, 'id', 'parentId')
-          this.dataListLoading = false
-        })
+    import {treeDataTranslate} from '@/utils'
+    import TableTreeColumn from '@/components/table-tree-column'
+    import AddOrUpdate from './enterpriseDepartment-add-or-update'
+
+    export default {
+      data () {
+        return {
+          dataForm: {
+            enterpriseId: '',
+            departmentName: ''
+          },
+          dataList: [],
+          pageIndex: 1,
+          pageSize: 10,
+          totalPage: 0,
+          dataListLoading: false,
+          dataListSelections: [],
+          addOrUpdateVisible: false
+        }
       },
-      // 新增 / 修改
-      addOrUpdateHandle (id, enterpriseId) {
-        this.addOrUpdateVisible = true
-        this.$nextTick(() => {
-          this.$refs.addOrUpdate.init(id, enterpriseId)
-        })
+      components: {
+        TableTreeColumn,
+        AddOrUpdate
       },
-      // 删除
-      deleteHandle (id) {
-        var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.id
-        })
-        this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      activated () {
+        this.getDataList()
+      },
+      methods: {
+            // 获取数据列表
+        getDataList () {
+          this.dataListLoading = true
           this.$http({
-            url: this.$http.adornUrl('/enterprise/enterpriseDepartment/delete'),
-            method: 'post',
-            data: this.$http.adornData(ids, false)
+            url: this.$http.adornUrl('/enterprise/enterpriseDepartment/list'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'departmentName': this.dataForm.departmentName,
+              'enterpriseId': this.dataForm.enterpriseId
+            })
           }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.getDataList()
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
+            this.dataList = treeDataTranslate(data.list, 'id', 'parentId')
+            this.dataListLoading = false
           })
-        })
+        },
+            // 新增 / 修改
+        addOrUpdateHandle (id) {
+          this.addOrUpdateVisible = true
+          this.$nextTick(() => {
+            this.$refs.addOrUpdate.init(id)
+          })
+        },
+            // 删除
+        deleteHandle (id) {
+          var ids = id ? [id] : this.dataListSelections.map(item => {
+            return item.id
+          })
+          this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http({
+              url: this.$http.adornUrl('/enterprise/enterpriseDepartment/delete'),
+              method: 'post',
+              data: this.$http.adornData(ids, false)
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success',
+                  duration: 1500,
+                  onClose: () => {
+                    this.getDataList()
+                  }
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            })
+          })
+        }
       }
     }
-  }
 </script>

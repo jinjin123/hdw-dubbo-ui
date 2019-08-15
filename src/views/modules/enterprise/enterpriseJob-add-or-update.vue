@@ -30,7 +30,7 @@
             @current-change="deptListTreeCurrentChangeHandle"
             :default-expand-all="false"
             :highlight-current="true"
-            :expand-on-click-node="false">
+            :expand-on-click-node="false" class="tree">
           </el-tree>
         </el-popover>
         <el-input v-model="dataForm.departmentName" v-popover:deptListPopover :readonly="true" placeholder="点击选择所属部门"
@@ -218,3 +218,26 @@
       }
     }
 </script>
+<style scoped>
+ .tree {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  /*滚动条整体部分*/
+  .tree::-webkit-scrollbar {
+    width: 6px;
+    background-color: rgba(217, 217, 217, 0.3);
+  }
+
+  /*滚动条里面的小方块，能向上向下移动*/
+  .tree::-webkit-scrollbar-thumb {
+    background-color: rgba(217, 217, 217, 0.3);
+    border-radius: 6px;
+  }
+
+  /*滚动条的轨道（里面装有Thumb）*/
+  .tree::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(217, 217, 217, 0.3);
+    background-color: #fff;
+  }
+  </style>

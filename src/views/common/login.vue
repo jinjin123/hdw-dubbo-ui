@@ -16,17 +16,17 @@
             <el-form-item prop="password">
               <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
             </el-form-item>
-            <el-form-item prop="captcha">
-              <el-row :gutter="20">
-                <el-col :span="14">
-                  <el-input v-model="dataForm.captcha" placeholder="验证码">
-                  </el-input>
-                </el-col>
-                <el-col :span="10" class="login-captcha">
-                  <img :src="captchaPath" @click="getCaptcha()" alt="">
-                </el-col>
-              </el-row>
-            </el-form-item>
+<!--            <el-form-item prop="captcha">-->
+<!--              <el-row :gutter="20">-->
+<!--                <el-col :span="14">-->
+<!--                  <el-input v-model="dataForm.captcha" placeholder="验证码">-->
+<!--                  </el-input>-->
+<!--                </el-col>-->
+<!--                <el-col :span="10" class="login-captcha">-->
+<!--                  <img :src="captchaPath" @click="getCaptcha()" alt="">-->
+<!--                </el-col>-->
+<!--              </el-row>-->
+<!--            </el-form-item>-->
             <el-form-item>
               <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录</el-button>
             </el-form-item>
@@ -64,7 +64,7 @@
         }
       },
       created () {
-        this.getCaptcha()
+        // this.getCaptcha()
       },
       methods: {
             // 提交表单
@@ -76,16 +76,16 @@
                 method: 'post',
                 data: this.$http.adornData({
                   'username': this.dataForm.userName,
-                  'password': this.dataForm.password,
-                  'uuid': this.dataForm.uuid,
-                  'captcha': this.dataForm.captcha
+                  'password': this.dataForm.password
+                  // 'uuid': this.dataForm.uuid,
+                  // 'captcha': this.dataForm.captcha
                 })
               }).then(({data}) => {
                 if (data && data.code === 0) {
                   this.$cookie.set('token', data.token)
                   this.$router.replace({name: 'home'})
                 } else {
-                  this.getCaptcha()
+                  // this.getCaptcha()
                   this.$message.error(data.msg)
                 }
               })

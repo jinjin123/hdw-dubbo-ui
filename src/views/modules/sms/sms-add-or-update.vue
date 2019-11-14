@@ -106,19 +106,20 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.smsTypeId = data.sms.smsTypeId
-                  this.dataForm.title = data.sms.title
-                  this.dataForm.content = data.sms.content
-                  this.dataForm.smsTime = data.sms.smsTime
-                  this.dataForm.smsCount = data.sms.smsCount
-                  this.dataForm.intervalTime = data.sms.intervalTime
-                  this.dataForm.status = data.sms.status
-                  this.dataForm.realTime = data.sms.realTime
-                  this.dataForm.realCount = data.sms.realCount
-                  this.dataForm.createTime = data.sms.createTime
-                  this.dataForm.updateTime = data.sms.updateTime
-                  this.dataForm.createUser = data.sms.createUser
-                  this.dataForm.updateUser = data.sms.updateUser
+                  console.log('dataForm', data)
+                  this.dataForm.smsTypeId = data.data.smsTypeId
+                  this.dataForm.title = data.data.title
+                  this.dataForm.content = data.data.content
+                  this.dataForm.smsTime = data.data.smsTime
+                  this.dataForm.smsCount = data.data.smsCount
+                  this.dataForm.intervalTime = data.data.intervalTime
+                  this.dataForm.status = data.data.status
+                  this.dataForm.realTime = data.data.realTime
+                  this.dataForm.realCount = data.data.realCount
+                  this.dataForm.createTime = data.data.createTime
+                  this.dataForm.updateTime = data.data.updateTime
+                  this.dataForm.createUser = data.data.createUser
+                  this.dataForm.updateUser = data.data.updateUser
                 }
               })
             }
@@ -167,7 +168,8 @@
             params: this.$http.adornParams()
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.typeList = data.list
+              console.log('typeList', data)
+              this.typeList = data.data
             }
           })
         }

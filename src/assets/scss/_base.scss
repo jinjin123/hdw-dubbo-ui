@@ -362,3 +362,31 @@ img {
   vertical-align: middle;
   margin-right: 5px;
 }
+.alert-info {
+  border: 1px solid #91d5ff;
+  background-color: #e6f7ff;
+  border-radius: 3px;
+  padding: 10px;
+  .alert-info-click {
+    cursor: pointer;
+    color: #1890ff;
+  }
+}
+.el-divider--horizontal {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin: 24px 0;
+}
+.el-divider--vertical {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin: 0 8px;
+  vertical-align: middle;
+  position: relative;
+}
+.el-divider {
+  background-color: #dcdfe6;
+  position: relative;
+}

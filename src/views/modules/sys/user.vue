@@ -150,8 +150,9 @@
             })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.dataList = data.page.list
-              this.totalPage = data.page.totalCount
+              this.dataList = data.data.list
+              console.log(this.dataList)
+              this.totalPage = data.data.totalCount
             } else {
               this.dataList = []
               this.totalPage = 0
@@ -186,6 +187,7 @@
           var userIds = id ? [id] : this.dataListSelections.map(item => {
             return item.id
           })
+          console.log(userIds)
           this.$confirm(`确定对[id=${userIds.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',

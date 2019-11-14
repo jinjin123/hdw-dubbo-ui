@@ -173,73 +173,79 @@
           carouselVisible: false,
           dataRule: {
             prefix: [
-                        {required: true, message: '企业id前缀不能为空', trigger: 'blur'}
+              {required: true, message: '企业id前缀不能为空', trigger: 'blur'}
             ],
             businessLicenseNumber: [
-                        {required: true, message: '企业注册码(工商注册码-三证合一)不能为空', trigger: 'blur'}
+              {required: true, message: '企业注册码(工商注册码-三证合一)不能为空', trigger: 'blur'}
             ],
             enterpriseCode: [
-                        {required: true, message: '企业编号不能为空', trigger: 'blur'}
+              {required: true, message: '企业编号不能为空', trigger: 'blur'}
             ],
             enterpriseName: [
-                        {required: true, message: '企业名称不能为空', trigger: 'blur'}
+              {required: true, message: '企业名称不能为空', trigger: 'blur'}
             ],
             industryCode: [
-                        {required: true, message: '所属行业不能为空', trigger: 'blur'}
+              {required: true, message: '所属行业不能为空', trigger: 'blur'}
             ],
             areaCode: [
-                        {required: true, message: '所属区域不能为空', trigger: 'blur'}
+              {required: true, message: '所属区域不能为空', trigger: 'blur'}
             ],
             enterpriseType: [
-                        {required: true, message: '企业类型不能为空', trigger: 'blur'}
+              {required: true, message: '企业类型不能为空', trigger: 'blur'}
             ],
             telephone: [
-                        {required: true, message: '企业联系电话不能为空', trigger: 'blur'}
+              {required: true, message: '企业联系电话不能为空', trigger: 'blur'},
+              {pattern: /^1[34578]\d{9}$/, message: '你的手机号格式不正确'}
             ],
             email: [
-                        {required: true, message: '企业邮箱不能为空', trigger: 'blur'}
+              {required: true, message: '企业邮箱不能为空', trigger: 'blur'},
+              { pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/, message: '你的邮箱格式不正确', trigger: 'blur' }
             ],
             zipCode: [
-                        {required: true, message: '邮政编码不能为空', trigger: 'blur'}
+              {required: true, message: '邮政编码不能为空', trigger: 'blur'}
             ],
             legalPerson: [
-                        {required: true, message: '法人不能为空', trigger: 'blur'}
+              {required: true, message: '法人不能为空', trigger: 'blur'}
             ],
             mainPerson: [
-                        {required: true, message: '企业负责人姓名不能为空', trigger: 'blur'}
+              {required: true, message: '企业负责人姓名不能为空', trigger: 'blur'}
             ],
             mainPersonMobile: [
-                        {required: true, message: '企业负责人移动电话号码不能为空', trigger: 'blur'}
+              {required: true, message: '企业负责人移动电话号码不能为空', trigger: 'blur'},
+              {pattern: /^1[34578]\d{9}$/, message: '你的手机号格式不正确'}
             ],
             mainPersonTelephone: [
-                        {required: true, message: '企业负责人固定电话号码不能为空', trigger: 'blur'}
+              {required: true, message: '企业负责人固定电话号码不能为空', trigger: 'blur'},
+              {pattern: /0\d{2}-\d{7,8}/, message: '你的座机号格式不正确'}
             ],
             safePerson: [
-                        {required: true, message: '企业安全负责人姓名不能为空', trigger: 'blur'}
+              {required: true, message: '企业安全负责人姓名不能为空', trigger: 'blur'}
             ],
             safePersonMobile: [
-                        {required: true, message: '企业安全负责人移动电话号码不能为空', trigger: 'blur'}
+              {required: true, message: '企业安全负责人移动电话号码不能为空', trigger: 'blur'},
+              {pattern: /^1[34578]\d{9}$/, message: '你的手机号格式不正确'}
             ],
             safePersonTelephone: [
-                        {required: true, message: '企业安全负责人固定电话号码不能为空', trigger: 'blur'}
+              {required: true, message: '企业安全负责人固定电话号码不能为空', trigger: 'blur'},
+              {pattern: /0\d{2}-\d{7,8}/, message: '你的座机号格式不正确'}
             ],
             mapX: [
-                        {required: true, message: 'x坐标不能为空', trigger: 'blur'}
+              {required: true, message: 'x坐标不能为空', trigger: 'blur'}
             ],
             mapY: [
-                        {required: true, message: 'y坐标不能为空', trigger: 'blur'}
+              {required: true, message: 'y坐标不能为空', trigger: 'blur'}
             ],
             mapZ: [
-                        {required: true, message: 'z坐标不能为空', trigger: 'blur'}
+              {required: true, message: 'z坐标不能为空', trigger: 'blur'}
             ],
             address: [
-                        {required: true, message: '地址不能为空', trigger: 'blur'}
+              {required: true, message: '地址不能为空', trigger: 'blur'}
             ],
             isSync: [
-                        {required: true, message: '数据是否同步不能为空', trigger: 'blur'}
+              {required: true, message: '数据是否同步不能为空', trigger: 'blur'}
             ],
             status: [
-                        {required: true, message: '企业状态不能为空', trigger: 'blur'}
+              {required: true, message: '企业状态不能为空', trigger: 'blur'}
             ]
           }
         }
@@ -250,6 +256,8 @@
           this.visible = true
           this.$nextTick(() => {
             this.$refs['dataForm'].resetFields()
+            this.initIndustryList()
+            this.initAreaList()
             if (this.dataForm.id) {
               this.$http({
                 url: this.$http.adornUrl(`/enterprise/info/${this.dataForm.id}`),
@@ -257,31 +265,29 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.prefix = data.enterprise.prefix
-                  this.dataForm.businessLicenseNumber = data.enterprise.businessLicenseNumber
-                  this.dataForm.enterpriseCode = data.enterprise.enterpriseCode
-                  this.dataForm.enterpriseName = data.enterprise.enterpriseName
-                  this.dataForm.industryCode = data.enterprise.industryCode
-                  this.dataForm.areaCode = data.enterprise.areaCode
-                  this.dataForm.enterpriseType = data.enterprise.enterpriseType
-                  this.dataForm.telephone = data.enterprise.telephone
-                  this.dataForm.email = data.enterprise.email
-                  this.dataForm.zipCode = data.enterprise.zipCode
-                  this.dataForm.legalPerson = data.enterprise.legalPerson
-                  this.dataForm.mainPerson = data.enterprise.mainPerson
-                  this.dataForm.mainPersonMobile = data.enterprise.mainPersonMobile
-                  this.dataForm.mainPersonTelephone = data.enterprise.mainPersonTelephone
-                  this.dataForm.safePerson = data.enterprise.safePerson
-                  this.dataForm.safePersonMobile = data.enterprise.safePersonMobile
-                  this.dataForm.safePersonTelephone = data.enterprise.safePersonTelephone
-                  this.dataForm.mapX = data.enterprise.mapX
-                  this.dataForm.mapY = data.enterprise.mapY
-                  this.dataForm.mapZ = data.enterprise.mapZ
-                  this.dataForm.address = data.enterprise.address
-                  this.dataForm.isSync = data.enterprise.isSync
-                  this.dataForm.status = data.enterprise.status
-                  this.initIndustryList()
-                  this.initAreaList()
+                  this.dataForm.prefix = data.data.prefix
+                  this.dataForm.businessLicenseNumber = data.data.businessLicenseNumber
+                  this.dataForm.enterpriseCode = data.data.enterpriseCode
+                  this.dataForm.enterpriseName = data.data.enterpriseName
+                  this.dataForm.industryCode = data.data.industryCode
+                  this.dataForm.areaCode = data.data.areaCode
+                  this.dataForm.enterpriseType = data.data.enterpriseType
+                  this.dataForm.telephone = data.data.telephone
+                  this.dataForm.email = data.data.email
+                  this.dataForm.zipCode = data.data.zipCode
+                  this.dataForm.legalPerson = data.data.legalPerson
+                  this.dataForm.mainPerson = data.data.mainPerson
+                  this.dataForm.mainPersonMobile = data.data.mainPersonMobile
+                  this.dataForm.mainPersonTelephone = data.data.mainPersonTelephone
+                  this.dataForm.safePerson = data.data.safePerson
+                  this.dataForm.safePersonMobile = data.data.safePersonMobile
+                  this.dataForm.safePersonTelephone = data.data.safePersonTelephone
+                  this.dataForm.mapX = data.data.mapX
+                  this.dataForm.mapY = data.data.mapY
+                  this.dataForm.mapZ = data.data.mapZ
+                  this.dataForm.address = data.data.address
+                  this.dataForm.isSync = data.data.isSync
+                  this.dataForm.status = data.data.status
                 }
               })
             }
@@ -299,7 +305,7 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  var files = data.fileList
+                  var files = data.data
                   var x
                   for (x in files) {
                     var localAddr = files[x].attachmentPath
@@ -325,7 +331,7 @@
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            this.industryList = data.dicList
+            this.industryList = data.data
           })
         },
         initAreaList () {
@@ -335,7 +341,7 @@
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            this.areaList = data.dicList
+            this.areaList = data.data
           })
         },
         submitUpload () {

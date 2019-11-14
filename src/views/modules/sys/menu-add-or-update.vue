@@ -146,23 +146,27 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              this.menuList = treeDataTranslate(data.menuList, 'id')
+              this.menuList = treeDataTranslate(data.data, 'id', 'parentId')
+              console.log('menuList', data.data)
+              console.log('menuList', this.menuList)
             }).then(() => {
+              console.log('id:', this.dataForm.id)
               if (this.dataForm.id) {
                 this.$http({
                   url: this.$http.adornUrl(`/sys/menu/info/${this.dataForm.id}`),
                   method: 'get',
                   params: this.$http.adornParams()
                 }).then(({data}) => {
-                  this.dataForm.id = data.menu.id
-                  this.dataForm.type = data.menu.resourceType
-                  this.dataForm.name = data.menu.name
-                  this.dataForm.description = data.menu.description
-                  this.dataForm.parentId = data.menu.parentId
-                  this.dataForm.url = data.menu.url
-                  this.dataForm.seq = data.menu.seq
-                  this.dataForm.icon = data.menu.icon
-                  this.dataForm.status = data.menu.status
+                  console.log('dataForm', data)
+                  this.dataForm.id = data.data.id
+                  this.dataForm.type = data.data.resourceType
+                  this.dataForm.name = data.data.name
+                  this.dataForm.description = data.data.description
+                  this.dataForm.parentId = data.data.parentId
+                  this.dataForm.url = data.data.url
+                  this.dataForm.seq = data.data.seq
+                  this.dataForm.icon = data.data.icon
+                  this.dataForm.status = data.data.status
                   this.menuListTreeSetCurrentNode()
                 })
               }

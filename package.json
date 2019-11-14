@@ -1,7 +1,7 @@
 {
-  "name": "hdw-dubbo-vue",
-  "version": "2.0.0",
-  "description": "hdw-dubbo-vue基于vue、element-ui构建开发，实现后台管理前端功能，提供一套更优的前端解决方案。",
+  "name": "hdw-dubbo-ui",
+  "version": "3.0.0",
+  "description": "hdw-dubbo-ui基于vue、element-ui构建开发，实现后台管理前端功能，提供一套更优的前端解决方案。",
   "author": "TuMinglong <tuminglong@126.com>",
   "private": true,
   "scripts": {

@@ -86,7 +86,8 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              this.dicList = treeDataTranslate(data.dicList, 'id', 'parentId')
+              console.log('dicList', data)
+              this.dicList = treeDataTranslate(data.data, 'id', 'parentId')
             }).then(() => {
               if (this.dataForm.id) {
                 this.$http({
@@ -94,10 +95,11 @@
                   method: 'get',
                   params: this.$http.adornParams()
                 }).then(({data}) => {
-                  this.dataForm.id = data.dic.id
-                  this.dataForm.varCode = data.dic.varCode
-                  this.dataForm.varName = data.dic.varName
-                  this.dataForm.parentId = data.dic.parentId
+                  console.log('dataForm', data)
+                  this.dataForm.id = data.data.id
+                  this.dataForm.varCode = data.data.varCode
+                  this.dataForm.varName = data.data.varName
+                  this.dataForm.parentId = data.data.parentId
                   this.dicListTreeSetCurrentNode()
                 })
               }

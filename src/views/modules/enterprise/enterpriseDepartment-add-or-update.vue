@@ -128,13 +128,13 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.parentId = data.enterpriseDepartment.parentId
-                  this.dataForm.enterpriseId = data.enterpriseDepartment.enterpriseId
-                  this.dataForm.departmentCode = data.enterpriseDepartment.departmentCode
-                  this.dataForm.departmentName = data.enterpriseDepartment.departmentName
-                  this.dataForm.parameter1 = data.enterpriseDepartment.parameter1
-                  this.dataForm.parameter2 = data.enterpriseDepartment.parameter2
-                  this.dataForm.isSync = data.enterpriseDepartment.isSync
+                  this.dataForm.parentId = data.data.parentId
+                  this.dataForm.enterpriseId = data.data.enterpriseId
+                  this.dataForm.departmentCode = data.data.departmentCode
+                  this.dataForm.departmentName = data.data.departmentName
+                  this.dataForm.parameter1 = data.data.parameter1
+                  this.dataForm.parameter2 = data.data.parameter2
+                  this.dataForm.isSync = data.data.isSync
                   this.deptListTreeSetCurrentNode()
                 }
               })
@@ -183,7 +183,8 @@
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            this.unitList = data.list
+            console.log('getEnterpriseTree', data)
+            this.unitList = data.data
           })
         },
             // 获取企业部门树
@@ -195,7 +196,8 @@
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            this.deptList = treeDataTranslate(data.list, 'id', 'parentId')
+            this.deptList = treeDataTranslate(data.data, 'id', 'parentId')
+            console.log('deptList', data)
           })
         },
             // 企业部门树选中

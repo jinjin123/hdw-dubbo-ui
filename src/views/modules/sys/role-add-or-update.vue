@@ -81,7 +81,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              this.menuList = treeDataTranslate(data, 'id', 'parentId')
+              this.menuList = treeDataTranslate(data.data, 'id', 'parentId')
               this.$refs.menuListTree.setCheckedNodes([])
             }).then(() => {
               if (this.dataForm.id) {
@@ -91,11 +91,11 @@
                   params: this.$http.adornParams()
                 }).then(({data}) => {
                   if (data && data.code === 0) {
-                    this.dataForm.name = data.role.name
-                    this.dataForm.seq = data.role.seq
-                    this.dataForm.status = data.role.status
-                    this.dataForm.description = data.role.description
-                    this.$refs.menuListTree.setCheckedNodes(data.role.resourceNodeList)
+                    this.dataForm.name = data.data.name
+                    this.dataForm.seq = data.data.seq
+                    this.dataForm.status = data.data.status
+                    this.dataForm.description = data.data.description
+                    this.$refs.menuListTree.setCheckedNodes(data.data.resourceNodeList)
                   }
                 })
               }
@@ -118,6 +118,7 @@
                   'resourceIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), this.$refs.menuListTree.getHalfCheckedKeys())
                 })
               }).then(({data}) => {
+                console.log('add', data)
                 if (data && data.code === 0) {
                   this.$message({
                     message: '操作成功',

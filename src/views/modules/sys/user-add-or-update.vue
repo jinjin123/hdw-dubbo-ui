@@ -248,20 +248,20 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.loginName = data.user.loginName
-                  this.dataForm.name = data.user.name
-                  this.dataForm.sex = data.user.sex
-                  this.dataForm.email = data.user.email
-                  this.dataForm.phone = data.user.phone
-                  this.dataForm.roleIdList = data.user.roleIdList
-                  this.dataForm.status = data.user.status
-                  this.dataForm.expired = data.user.expired
-                  this.dataForm.userType = data.user.userType
-                  this.dataForm.isLeader = data.user.isLeader
-                  this.dataForm.enterpriseId = data.user.enterpriseId
-                  this.dataForm.departmentId = data.user.departmentId
-                  this.dataForm.jobId = data.user.jobId
-                  this.dataForm.enterpriseIdList = data.user.enterpriseIdList
+                  this.dataForm.loginName = data.data.loginName
+                  this.dataForm.name = data.data.name
+                  this.dataForm.sex = data.data.sex
+                  this.dataForm.email = data.data.email
+                  this.dataForm.phone = data.data.phone
+                  this.dataForm.roleIdList = data.data.roleIdList
+                  this.dataForm.status = data.data.status
+                  this.dataForm.expired = data.data.expired
+                  this.dataForm.userType = data.data.userType
+                  this.dataForm.isLeader = data.data.isLeader
+                  this.dataForm.enterpriseId = data.data.enterpriseId
+                  this.dataForm.departmentId = data.data.departmentId
+                  this.dataForm.jobId = data.data.jobId
+                  this.dataForm.enterpriseIdList = data.data.enterpriseIdList
                 }
               })
             }

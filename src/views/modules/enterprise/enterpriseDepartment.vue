@@ -105,7 +105,7 @@
               'enterpriseId': this.dataForm.enterpriseId
             })
           }).then(({data}) => {
-            this.dataList = treeDataTranslate(data.list, 'id', 'parentId')
+            this.dataList = treeDataTranslate(data.data, 'id', 'parentId')
             this.dataListLoading = false
           })
         },

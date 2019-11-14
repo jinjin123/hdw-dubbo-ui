@@ -85,7 +85,7 @@
               'dicName': this.dataForm.varName
             })
           }).then(({data}) => {
-            this.dataList = treeDataTranslate(data, 'id', 'parentId')
+            this.dataList = treeDataTranslate(data.data, 'id', 'parentId')
             this.dataListLoading = false
           })
         },

@@ -149,9 +149,10 @@
               'endTime': this.dataForm.endTime
             })
           }).then(({data}) => {
+            console.log('dataList', data)
             if (data && data.code === 0) {
-              this.dataList = data.page.list
-              this.totalPage = data.page.totalCount
+              this.dataList = data.data.list
+              this.totalPage = data.data.totalCount
             } else {
               this.dataList = []
               this.totalPage = 0

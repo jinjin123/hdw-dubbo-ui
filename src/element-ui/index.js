@@ -36,6 +36,7 @@ import {
   Table,
   TableColumn,
   DatePicker,
+  Divider,
   TimeSelect,
   TimePicker,
   Popover,
@@ -72,6 +73,7 @@ import {
   Aside,
   Main,
   Footer,
+  Link,
   Loading,
   MessageBox,
   Message,
@@ -105,6 +107,7 @@ Vue.use(ButtonGroup)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(DatePicker)
+Vue.use(Divider)
 Vue.use(TimeSelect)
 Vue.use(TimePicker)
 Vue.use(Popover)
@@ -141,6 +144,7 @@ Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Footer)
+Vue.use(Link)
 
 Vue.use(Loading.directive)
 

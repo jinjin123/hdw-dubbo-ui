@@ -46,7 +46,7 @@
           dataForm: {
             id: 0,
             typeName: '',
-            accountList: '',
+            accountList: [],
             isSendSms: 1,
             isSendEmail: 1
           },
@@ -82,14 +82,23 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.typeName = data.smsType.typeName
-                  this.dataForm.accountList = data.smsType.accountList
-                  this.dataForm.isSendSms = data.smsType.isSendSms
-                  this.dataForm.isSendEmail = data.smsType.isSendEmail
+                  console.log('dataForm', data)
+                  this.dataForm.typeName = data.data.typeName
+                  this.dataForm.accountList = this.stringToArray(data.data.accountList[0])
+                  this.dataForm.isSendSms = data.data.isSendSms
+                  this.dataForm.isSendEmail = data.data.isSendEmail
                 }
               })
             }
           })
+        },
+        stringToArray (str) {
+          var array = str.split(',')
+          var toArray = []
+          for (var i in array) {
+            toArray.push(array[i] + '')
+          }
+          return toArray
         },
             // 表单提交
         dataFormSubmit () {
@@ -131,7 +140,8 @@
             params: this.$http.adornParams()
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.userList = data.list
+              console.log('userList', data)
+              this.userList = data.data
             }
           })
         }

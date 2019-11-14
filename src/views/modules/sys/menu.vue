@@ -113,12 +113,14 @@
             method: 'get',
             params: this.$http.adornParams()
           }).then(({data}) => {
-            this.dataList = treeDataTranslate(data, 'id')
+            this.dataList = treeDataTranslate(data.data, 'id')
+            console.log('dataList', this.dataList)
             this.dataListLoading = false
           })
         },
             // 新增 / 修改
         addOrUpdateHandle (id) {
+          console.log(id)
           this.addOrUpdateVisible = true
           this.$nextTick(() => {
             this.$refs.addOrUpdate.init(id)

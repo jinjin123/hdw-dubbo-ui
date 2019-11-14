@@ -68,12 +68,12 @@
                 params: this.$http.adornParams()
               }).then(({data}) => {
                 if (data && data.code === 0) {
-                  this.dataForm.beanName = data.schedule.beanName
-                  this.dataForm.methodName = data.schedule.methodName
-                  this.dataForm.params = data.schedule.params
-                  this.dataForm.cronExpression = data.schedule.cronExpression
-                  this.dataForm.remark = data.schedule.remark
-                  this.dataForm.status = data.schedule.status
+                  this.dataForm.beanName = data.data.beanName
+                  this.dataForm.methodName = data.data.methodName
+                  this.dataForm.params = data.data.params
+                  this.dataForm.cronExpression = data.data.cronExpression
+                  this.dataForm.remark = data.data.remark
+                  this.dataForm.status = data.data.status
                 }
               })
             }

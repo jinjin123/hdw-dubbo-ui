@@ -10,18 +10,15 @@
 
 
 #### 系统预览
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/QQ%E6%88%AA%E5%9B%BE20181219204905.png)
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/QQ%E6%88%AA%E5%9B%BE20181219210136.png)
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/QQ%E6%88%AA%E5%9B%BE20181219210210.png)
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/QQ%E6%88%AA%E5%9B%BE20181219210441.png)
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/QQ%E6%88%AA%E5%9B%BE20181219210502.png)
-![image](https://github.com/tumao2/hdw-dubbo/blob/master/img/hdw-dubbo%E6%8A%80%E6%9C%AF%E4%BA%A4%E6%B5%81%E7%BE%A4%E7%BE%A4%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/QQ%E6%88%AA%E5%9B%BE20181219204905.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/QQ%E6%88%AA%E5%9B%BE20181219210136.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/QQ%E6%88%AA%E5%9B%BE20181219210150.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/QQ%E6%88%AA%E5%9B%BE20181219210210.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/QQ%E6%88%AA%E5%9B%BE20181219210441.png)
+![image](https://github.com/JacksonTu/hdw-dubbo/blob/master/docs/img/hdw-dubbo%E6%8A%80%E6%9C%AF%E4%BA%A4%E6%B5%81%E7%BE%A4%E7%BE%A4%E4%BA%8C%E7%BB%B4%E7%A0%81.png)
 
-
-
-#### 说明文档
-项目开发、部署等说明都在[wiki](https://github.com/tumao2/hdw-dubbo-ui/wiki)中。
 
 
 #### 更新日志
-每个版本的详细更改都记录在[release notes](https://github.com/tumao2/hdw-dubbo-ui/releases)中。
++ v3.0.0
+ + 代码优化

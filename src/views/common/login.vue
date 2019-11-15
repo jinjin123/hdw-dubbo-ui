@@ -10,17 +10,6 @@
         <el-form-item prop="password">
           <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
         </el-form-item>
-        <!--            <el-form-item prop="captcha">-->
-        <!--              <el-row :gutter="20">-->
-        <!--                <el-col :span="14">-->
-        <!--                  <el-input v-model="dataForm.captcha" placeholder="验证码">-->
-        <!--                  </el-input>-->
-        <!--                </el-col>-->
-        <!--                <el-col :span="10" class="login-captcha">-->
-        <!--                  <img :src="captchaPath" @click="getCaptcha()" alt="">-->
-        <!--                </el-col>-->
-        <!--              </el-row>-->
-        <!--            </el-form-item>-->
         <el-form-item>
           <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录</el-button>
         </el-form-item>
@@ -30,7 +19,6 @@
 </template>
 
 <script>
-    import {getUUID} from '@/utils'
     import {aes} from '@/utils/crypto'
 
     export default {
@@ -57,7 +45,6 @@
         }
       },
       created () {
-        // this.getCaptcha()
       },
       methods: {
             // 提交表单
@@ -76,17 +63,11 @@
                   this.$cookie.set('token', data.data.token)
                   this.$router.replace({name: 'home'})
                 } else {
-                  // this.getCaptcha()
                   this.$message.error(data.data.msg)
                 }
               })
             }
           })
-        },
-        // 获取验证码
-        getCaptcha () {
-          this.dataForm.uuid = getUUID()
-          this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)
         }
       }
     }

@@ -19,9 +19,8 @@
 </template>
 
 <script>
-    import {
-        aes
-    } from 'crypto-js'
+    import aes from '@/utils/encrypte.js'
+    // import aes from  'crypto-js'
 
     export default {
         data() {
@@ -30,7 +29,7 @@
                     userName: '',
                     password: '',
                     uuid: '',
-                    captcha: ''
+                    // captcha: ''
                 },
                 dataRule: {
                     userName: [{
@@ -62,12 +61,13 @@
                             url: this.$http.adornUrl('/sys/login'),
                             method: 'post',
                             data: this.$http.adornData({
-                                'username': aes.en(JSON.stringify(this.dataForm.userName)),
-                                'password': aes.en(JSON.stringify(this.dataForm.password))
+                                'username': aes.Encrypt(JSON.stringify(this.dataForm.userName)),
+                                'password': aes.Encrypt(JSON.stringify(this.dataForm.password))
                             })
                         }).then(({
                             data
                         }) => {
+                            console.log("unknown")
                             if (data && data.code === 0) {
                                 this.$cookie.set('token', data.data.token)
                                 this.$router.replace({
